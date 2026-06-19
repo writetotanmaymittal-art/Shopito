@@ -1,124 +1,102 @@
-import streamlit as st
+9import streamlit as st
 import pandas as pd
 import time
+from typing import Dict, List, Any, Optional
 
-# --- Page Configuration ---
+# ==========================================
+# 1. ENTERPRISE CONFIGURATION & COMPLEX THEME ENGINE
+# ==========================================
 st.set_page_config(
-    page_title="Shopito Corporate Marketplace", 
-    page_icon="🛍️", 
+    page_title="Shopito Enterprise Hub",
+    page_icon="👑",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# --- Complex Theme & Global Style Sheet (Premium Purple Enterprise Theme) ---
+# Deep Purple High-Fidelity Enterprise Stylesheet
 st.markdown("""
     <style>
-        /* Global Font Hierarchy & Sizing Rules */
         html, body, [class*="css"] {
-            font-size: 18px !important;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-size: 16px;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
-        h1 { font-size: 2.6rem !important; font-weight: 700 !important; color: #4C1D95; }
-        h2 { font-size: 1.9rem !important; font-weight: 600 !important; color: #5B21B6; }
-        h3 { font-size: 1.5rem !important; font-weight: 600 !important; color: #6D28D9; }
+        h1 { font-size: 2.8rem !important; font-weight: 800 !important; color: #4C1D95; letter-spacing: -0.03em; }
+        h2 { font-size: 2.0rem !important; font-weight: 700 !important; color: #5B21B6; }
+        h3 { font-size: 1.4rem !important; font-weight: 600 !important; color: #6D28D9; }
         
-        /* Profile Management Sidebar Container */
-        .profile-container {
+        /* Glassmorphism Profile Container */
+        .premium-profile-box {
             text-align: center;
-            padding: 20px;
-            background: linear-gradient(145deg, #F3E8FF, #FAE8FF);
-            border-radius: 16px;
-            margin-bottom: 25px;
-            border: 1px solid #E9D5FF;
-            box-shadow: 0 4px 6px -1px rgba(109, 40, 217, 0.1);
+            padding: 24px;
+            background: linear-gradient(135deg, #F5EDFF 0%, #FFF0F5 100%);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 2px solid #E9D5FF;
+            box-shadow: 0 10px 15px -3px rgba(109, 40, 217, 0.1);
         }
-        .profile-pic {
-            width: 120px;
-            height: 120px;
+        .premium-avatar {
+            width: 110px;
+            height: 110px;
             border-radius: 50%;
             object-fit: cover;
-            margin-bottom: 12px;
+            margin: 0 auto 15px auto;
             border: 4px solid #7C3AED;
-            box-shadow: 0 0 10px rgba(124, 58, 237, 0.3);
+            box-shadow: 0 0 15px rgba(124, 58, 237, 0.4);
         }
-        .profile-name {
-            font-weight: 700;
-            font-size: 1.3rem;
+        .premium-profile-name {
+            font-weight: 800;
+            font-size: 1.4rem;
             color: #4C1D95;
+            margin-bottom: 2px;
         }
         
-        /* Premium Live Enterprise Advertisement Banner */
-        .ad-banner {
-            background: linear-gradient(135deg, #4C1D95 0%, #7C3AED 50%, #C084FC 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 14px;
+        /* High-Impact Marketing Canvas */
+        .marquee-banner {
+            background: linear-gradient(135deg, #2E1065 0%, #4C1D95 50%, #7C3AED 100%);
+            color: #F5F3FF;
+            padding: 30px;
+            border-radius: 18px;
             text-align: center;
             font-weight: 800;
-            font-size: 1.6rem;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 15px -3px rgba(124, 58, 237, 0.3);
-            border: 1px solid #A78BFA;
+            font-size: 1.8rem;
+            margin-bottom: 35px;
+            box-shadow: 0 20px 25px -5px rgba(124, 58, 237, 0.3);
+            border-left: 8px solid #C084FC;
         }
         
-        /* High-Fidelity Product Card Framework */
-        .product-card {
+        /* Advanced Dynamic Product Card Grid System */
+        .matrix-card {
             background: #FFFFFF;
-            padding: 24px;
-            border-radius: 16px;
+            padding: 25px;
+            border-radius: 20px;
             border: 1px solid #F3E8FF;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
-            margin-bottom: 25px;
-            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(109, 40, 217, 0.03);
+            margin-bottom: 30px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
-        .product-card:hover {
-            box-shadow: 0 10px 15px rgba(109, 40, 217, 0.08);
+        .matrix-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(109, 40, 217, 0.08);
             border-color: #DDD6FE;
         }
         
-        /* Professional Price Layout Engine */
-        .price-label {
-            font-size: 0.95rem;
-            color: #7C3AED;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 2px;
-            font-weight: 600;
+        /* Financial Analytics Micro-Layouts */
+        .financial-metric-container {
+            background: #FAFAFE;
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 4px solid #7C3AED;
+            margin-bottom: 10px;
         }
-        .price-value {
-            font-size: 1.6rem;
-            font-weight: 800;
-            color: #1E1B4B;
-        }
+        .fin-label { font-size: 0.85rem; color: #6B7280; text-transform: uppercase; font-weight: 600; }
+        .fin-val { font-size: 1.4rem; font-weight: 700; color: #1F2937; }
     </style>
 """, unsafe_allow_html=True)
 
-# --- Enterprise Application Core State Manager ---
-if 'wallet_balance' not in st.session_state:
-    st.session_state.wallet_balance = 50000.0
-if 'credit_limit' not in st.session_state:
-    st.session_state.credit_limit = 0.0
-if 'credit_used' not in st.session_state:
-    st.session_state.credit_used = 0.0
-if 'is_pro_max' not in st.session_state:
-    st.session_state.is_pro_max = False
-if 'cart_dict' not in st.session_state:
-    st.session_state.cart_dict = {}  # Safe mapping architecture for tracking item quantities
-if 'settled_orders' not in st.session_state:
-    st.session_state.settled_orders = []
-if 'trigger_celebration' not in st.session_state:
-    st.session_state.trigger_celebration = True
-
-# Account Holder Profile Defaults
-if 'user_name' not in st.session_state:
-    st.session_state.user_name = "Krishna Kumar"
-if 'user_phone' not in st.session_state:
-    st.session_state.user_phone = "+91 98765 43210"
-if 'user_pfp' not in st.session_state:
-    st.session_state.user_pfp = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400"
-
-# --- Comprehensive Unified Marketplace Catalog ---
-MARKETPLACE_CATALOG = {
+# ==========================================
+# 2. ISOLATED RELATIONAL PRODUCT REGISTRY DATABASE
+# ==========================================
+GLOBAL_PRODUCT_REGISTRY: Dict[str, Dict[str, List[Dict[str, Any]]]] = {
     "electronics": [
         {"id": "macbook_16", "name": "Apple MacBook Pro 16\" (M3 Max, 48GB, 1TB SSD)", "price": 349900.0, "img": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400"},
         {"id": "iphone_15", "name": "Apple iPhone 15 Pro Max Titanium Edition", "price": 159900.0, "img": "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400"},
@@ -129,281 +107,281 @@ MARKETPLACE_CATALOG = {
     ]
 }
 
-def resolve_catalog_product(product_id):
-    for category_list in MARKETPLACE_CATALOG.values():
-        for product in category_list:
-            if product["id"] == product_id:
-                return product
+# Helper method to safely pull entities across memory loops
+def lookup_system_entity(uid: str) -> Optional[Dict[str, Any]]:
+    for block in GLOBAL_PRODUCT_REGISTRY.values():
+        for entity in block:
+            if entity["id"] == uid:
+                return entity
     return None
 
-# --- SIDEBAR NAV: Account Profile & Navigation Controller ---
+# ==========================================
+# 3. OBJECT-ORIENTED APP STATE SUBSYSTEM
+# ==========================================
+class EnterpriseStateEngine:
+    @staticmethod
+    def initialize_state_matrices():
+        # Session Registry Guard Checks
+        if 'wallet_funds' not in st.session_state: st.session_state.wallet_funds = 50000.0
+        if 'credit_max_limit' not in st.session_state: st.session_state.credit_max_limit = 0.0
+        if 'credit_allocated_debt' not in st.session_state: st.session_state.credit_allocated_debt = 0.0
+        if 'tier_pro_max_active' not in st.session_state: st.session_state.tier_pro_max_active = False
+        if 'cart_quantities_map' not in st.session_state: st.session_state.cart_quantities_map = {}
+        if 'transaction_ledger_records' not in st.session_state: st.session_state.transaction_ledger_records = []
+        if 'dashboard_animation_trigger' not in st.session_state: st.session_state.dashboard_animation_trigger = True
+        
+        # User Config Registries
+        if 'meta_profile_name' not in st.session_state: st.session_state.meta_profile_name = "Krishna Kumar"
+        if 'meta_profile_phone' not in st.session_state: st.session_state.meta_profile_phone = "+91 98765 43210"
+        if 'meta_profile_avatar' not in st.session_state: st.session_state.meta_profile_avatar = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400"
+
+    @property
+    def dynamic_available_credit(self) -> float:
+        return max(0.0, st.session_state.credit_max_limit - st.session_state.credit_allocated_debt)
+
+# Instantiate State Object Instance
+state_controller = EnterpriseStateEngine()
+state_controller.initialize_state_matrices()
+
+# ==========================================
+# 4. SIDEBAR IDENTITY MANAGEMENT & NAV MATRIX
+# ==========================================
 with st.sidebar:
-    # Dedicated Account Holder Access Profile Display
     st.markdown(f"""
-        <div class="profile-container">
-            <img src="{st.session_state.user_pfp}" class="profile-pic">
-            <div class="profile-name">{st.session_state.user_name}</div>
-            <div style="font-size:0.9rem; color:#6B28D9; font-weight:500;">{st.session_state.user_phone}</div>
+        <div class="premium-profile-box">
+            <img src="{st.session_state.meta_profile_avatar}" class="premium-avatar">
+            <div class="premium-profile-name">{st.session_state.meta_profile_name}</div>
+            <div style="font-size:0.95rem; color:#7C3AED; font-weight:600; margin-top:2px;">{st.session_state.meta_profile_phone}</div>
         </div>
     """, unsafe_allow_html=True)
     
-    st.markdown("### Navigation Matrix")
-    selected_view = st.radio("Navigate to:", [
-        "🏠 Dashboard Management Hub", 
-        "📦 Enterprise Product Catalog", 
-        "🛒 Consolidated Shopping Cart", 
-        "💳 Multi-Tier Wallet & Credit Engine", 
-        "📝 Authorized Settlement Ledger",
-        "👤 Profile Access Configuration"
+    st.markdown("### Operational Domain Engine")
+    navigation_intent = st.radio("Execute View Route:", [
+        "💼 Control Center Dashboard", 
+        "🏛️ High-Value Catalog Ledger", 
+        "🛒 High-Fidelity Checkout Core", 
+        "📊 Capital Allocation & Credit Desk", 
+        "📑 Audit-Trail Settlement Ledger",
+        "⚙️ Core Identity Infrastructure"
     ])
     
     st.markdown("---")
-    # Live Real-time Asset Metrics
-    st.metric("Liquid Wallet Balance", f"₹{st.session_state.wallet_balance:,.2f}")
-    if st.session_state.is_pro_max:
-        st.success("👑 Shopito Pro Max Authorized")
-        net_credit_available = st.session_state.credit_limit - st.session_state.credit_used
-        st.metric("Available Interest-Free Credit", f"₹{net_credit_available:,.2f}")
+    st.markdown("### Real-Time Financial Liquidity View")
+    st.metric("Liquid Cash Holdings", f"₹{st.session_state.wallet_funds:,.2f}")
+    if st.session_state.tier_pro_max_active:
+        st.success("👑 Shopito Pro Max Profile Deployed")
+        st.metric("Available Capital Runway", f"₹{state_controller.dynamic_available_credit:,.2f}")
 
-
-# --- PAGE 1: DASHBOARD MANAGEMENT HUB ---
-if selected_view == "🏠 Dashboard Management Hub":
-    # High-impact Birthday Popper Explosion System (Triggers automatically upon opening dashboard)
-    if st.session_state.trigger_celebration:
+# ==========================================
+# ROUTE 1: CONTROL CENTER DASHBOARD
+# ==========================================
+if navigation_intent == "💼 Control Center Dashboard":
+    if st.session_state.dashboard_animation_trigger:
         st.balloons()
-        st.session_state.trigger_celebration = False
+        st.session_state.dashboard_animation_trigger = False
         
-    st.title("Welcome to Shopito Corporate Dashboard")
+    st.title("Shopito Enterprise Control Center")
     
-    # Live Marketing Run Banner
     st.markdown("""
-        <div class="ad-banner">
-            🚀 EXCLUSIVE SHOPITO OPENING SPECIALS: Premium Access Tiers and Luxury Assets Are Now Live! 🚀
+        <div class="marquee-banner">
+            🚀 ENTERPRISE PROTOCOLS ACTIVE: Dynamic Tier-Scaling Solutions & Capital Injections Enabled.
         </div>
     """, unsafe_allow_html=True)
     
-    # Summary Dashboard Layout Matrix
-    d_col1, d_col2, d_col3 = st.columns(3)
-    with d_col1:
-        st.info("### Core Access Tier Status")
-        if st.session_state.is_pro_max:
-            st.markdown("**Current Plan:** Shopito Pro Max<br>**System Access:** Full Premium Authorization & Interest-free Credit Activated", unsafe_allow_html=True)
+    col_dash_1, col_dash_2, col_dash_3 = st.columns(3)
+    with col_dash_1:
+        st.markdown("""<div class="financial-metric-container">""", unsafe_allow_html=True)
+        st.markdown('<p class="fin-label">System Tier Clearance</p>', unsafe_allow_html=True)
+        if st.session_state.tier_pro_max_active:
+            st.markdown('<p class="fin-val" style="color:#7C3AED;">👑 Pro Max Enterprise</p>', unsafe_allow_html=True)
         else:
-            st.markdown("**Current Plan:** Standard Account Tier<br>Upgrade to *Shopito Pro Max* to activate the ₹10 Lakhs Interest-Free Credit Framework.", unsafe_allow_html=True)
-            
-    with d_col2:
-        st.info("### Cart Summary Data")
-        net_units = sum(st.session_state.cart_dict.values())
-        st.markdown(f"**Unique Stock Keeping Units:** {len(st.session_state.cart_dict)} lines<br>**Gross Units Allocated:** {net_units} pieces", unsafe_allow_html=True)
+            st.markdown('<p class="fin-val">Standard Consumer</p>', unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
         
-    with d_col3:
-        st.info("### Premium Options")
-        if not st.session_state.is_pro_max:
-            st.markdown("Subscribe to access immediate interest-free capital liquidity options.")
-        else:
-            st.markdown("✅ All high-limit credit and payment settlement architectures are fully accessible.")
+    with col_dash_2:
+        st.markdown("""<div class="financial-metric-container">""", unsafe_allow_html=True)
+        st.markdown('<p class="fin-label">Cart Structural Units</p>', unsafe_allow_html=True)
+        total_units = sum(st.session_state.cart_quantities_map.values())
+        st.markdown(f'<p class="fin-val">{total_units} Active Items</p>', unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
+        
+    with col_dash_3:
+        st.markdown("""<div class="financial-metric-container">""", unsafe_allow_html=True)
+        st.markdown('<p class="fin-label">Active Capital Index</p>', unsafe_allow_html=True)
+        st.markdown(f'<p class="fin-val">₹{st.session_state.wallet_funds:,.2f}</p>', unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
-
-# --- PAGE 2: ENTERPRISE PRODUCT CATALOG ---
-elif selected_view == "📦 Enterprise Product Catalog":
-    st.title("Shopito Premium Marketplace Catalog")
-    st.session_state.trigger_celebration = True  # Queue celebration poppers for next dashboard visit
+# ==========================================
+# ROUTE 2: HIGH-VALUE CATALOG LEDGER
+# ==========================================
+elif navigation_intent == "🏛️ High-Value Catalog Ledger":
+    st.title("Global Asset Matrix Ledger")
+    st.session_state.dashboard_animation_trigger = True
     
-    market_filter = st.selectbox("Select Marketplace Category Matrix:", ["All Categorized Verticals", "Premium Consumer Electronics", "Luxury Mechanical Timepieces"])
+    catalog_query = st.selectbox("Isolate Category View Model:", ["Display Complete Catalog", "Isolated Enterprise Electronics", "Isolated Luxury Mechanical Watch Units"])
     
-    render_pool = []
-    if market_filter == "All Categorized Verticals" or market_filter == "Premium Consumer Electronics":
-        render_pool.extend(MARKETPLACE_CATALOG["electronics"])
-    if market_filter == "All Categorized Verticals" or market_filter == "Luxury Mechanical Timepieces":
-        render_pool.extend(MARKETPLACE_CATALOG["watches"])
+    render_pipeline = []
+    if catalog_query == "Display Complete Catalog" or catalog_query == "Isolated Enterprise Electronics":
+        render_pipeline.extend(GLOBAL_PRODUCT_REGISTRY["electronics"])
+    if catalog_query == "Display Complete Catalog" or catalog_query == "Isolated Luxury Mechanical Watch Units":
+        render_pipeline.extend(GLOBAL_PRODUCT_REGISTRY["watches"])
         
-    for item in render_pool:
-        st.markdown(f'<div class="product-card">', unsafe_allow_html=True)
-        col_img, col_desc, col_actions = st.columns([1.2, 2, 1])
+    for asset in render_pipeline:
+        st.markdown('<div class="matrix-card">', unsafe_allow_html=True)
+        img_col, description_col, pipeline_controls_col = st.columns([1, 2, 1])
         
-        with col_img:
-            st.image(item["img"], use_container_width=True)
+        with img_col:
+            st.image(asset["img"], use_container_width=True)
+        with description_col:
+            st.markdown(f"### {asset['name']}")
+            st.markdown(f'<p style="color:#6D28D9; font-weight:700; margin:0;">ASSET EVALUATION ID: {asset["id"].upper()}</p>', unsafe_allow_html=True)
+            st.markdown(f'<p style="font-size:1.8rem; font-weight:900; color:#1E1B4B; margin-top:5px;">₹{asset["price"]:,.2f}</p>', unsafe_allow_html=True)
+        with pipeline_controls_col:
+            current_unit_depth = st.session_state.cart_quantities_map.get(asset["id"], 0)
+            st.markdown(f"State Unit Vector Allocation: **{current_unit_depth}**")
             
-        with col_desc:
-            st.markdown(f"### {item['name']}")
-            st.markdown('<p class="price-label">MSRP Value</p>', unsafe_allow_html=True)
-            st.markdown(f'<p class="price-value">₹{item["price"]:,.2f}</p>', unsafe_allow_html=True)
-            
-        with col_actions:
-            allocated_units = st.session_state.cart_dict.get(item["id"], 0)
-            st.markdown(f"Allocated in Cart: **{allocated_units}**")
-            
-            # Formally Isolated Modification Controllers
-            if allocated_units < 20:
-                if st.button(f"➕ Add Unit", key=f"inc_{item['id']}"):
-                    st.session_state.cart_dict[item["id"]] = allocated_units + 1
-                    st.rerun()
-            else:
-                st.caption("Maximum unit allocation cap reached (20).")
-                
-            if allocated_units > 0:
-                if st.button(f"➖ Remove Unit", key=f"dec_{item['id']}"):
-                    st.session_state.cart_dict[item["id"]] = allocated_units - 1
-                    if st.session_state.cart_dict[item["id"]] == 0:
-                        del st.session_state.cart_dict[item["id"]]
-                    st.rerun()
-                    
+            c_btn_1, c_btn_2 = st.columns(2)
+            with c_btn_1:
+                if current_unit_depth < 20:
+                    if st.button("➕ Increment", key=f"add_{asset['id']}"):
+                        st.session_state.cart_quantities_map[asset["id"]] = current_unit_depth + 1
+                        st.rerun()
+            with c_btn_2:
+                if current_unit_depth > 0:
+                    if st.button("➖ Decrement", key=f"sub_{asset['id']}"):
+                        st.session_state.cart_quantities_map[asset["id"]] = current_unit_depth - 1
+                        if st.session_state.cart_quantities_map[asset["id"]] == 0:
+                            del st.session_state.cart_quantities_map[asset["id"]]
+                        st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
 
-
-# --- PAGE 3: CONSOLIDATED SHOPPING CART ---
-elif selected_view == "🛒 Consolidated Shopping Cart":
-    st.title("Your Consolidated Shopping Cart Ledger")
-    st.session_state.trigger_celebration = True
+# ==========================================
+# ROUTE 3: HIGH-FIDELITY CHECKOUT CORE
+# ==========================================
+elif navigation_intent == "🛒 High-Fidelity Checkout Core":
+    st.title("Consolidated Liability Ledger Settlement Matrix")
+    st.session_state.dashboard_animation_trigger = True
     
-    if not st.session_state.cart_dict:
-        st.warning("Your transaction queue is empty. Please add items from the Enterprise Product Catalog.")
+    if not st.session_state.cart_quantities_map:
+        st.info("System Alert: Transaction data pipeline empty. No liabilities detected.")
     else:
-        calculated_grand_total = 0.0
-        st.markdown("### Itemization Review Matrix")
+        aggregated_liability = 0.0
+        st.markdown("### Current Valuation Stream Breakdown")
         
-        for p_id, unit_qty in list(st.session_state.cart_dict.items()):
-            target_product = resolve_catalog_product(p_id)
-            if target_product:
-                line_total = target_product["price"] * unit_qty
-                calculated_grand_total += line_total
+        for lookup_id, unit_volume in list(st.session_state.cart_quantities_map.items()):
+            target_entity = lookup_system_entity(lookup_id)
+            if target_entity:
+                sub_total_liability = target_entity["price"] * unit_volume
+                aggregated_liability += sub_total_liability
                 
-                row_c1, row_c2, row_c3, row_c4 = st.columns([3, 1.2, 1, 1])
-                with row_c1:
-                    st.markdown(f"**{target_product['name']}**")
-                with row_c2:
-                    st.markdown(f"₹{target_product['price']:,.2f} each")
-                with row_c3:
-                    st.markdown(f"**Qty: {unit_qty}**")
-                with row_c4:
-                    if st.button("🗑️ Purge Item", key=f"purge_{p_id}"):
-                        del st.session_state.cart_dict[p_id]
+                b_col1, b_col2, b_col3, b_col4 = st.columns([3, 1, 1, 1])
+                with b_col1: st.markdown(f"**{target_entity['name']}**")
+                with b_col2: st.markdown(f"₹{target_entity['price']:,.2f}")
+                with b_col3: st.markdown(f"Units: **{unit_volume}**")
+                with b_col4:
+                    if st.button("🗑️ Purge Line", key=f"purge_line_{lookup_id}"):
+                        del st.session_state.cart_quantities_map[lookup_id]
                         st.rerun()
-                st.markdown("---")
+                st.markdown("<hr style='margin: 8px 0; border: 0; border-top: 1px solid #F3E8FF;'/>", unsafe_allow_html=True)
                 
-        st.markdown(f"### Total Settlement Liability: **₹{calculated_grand_total:,.2f}**")
+        st.markdown(f"## Net Settlement Overhead: **₹{aggregated_liability:,.2f}**")
         
-        st.markdown("### Select Payment Gateway Authorization Route")
-        selected_route = st.radio("Authorization Source:", ["Standard Wallet Balance Core", "Pro Max Corporate Credit Facility"])
+        st.markdown("### Choose Financial Settlement Instrument Gateway")
+        selected_instrument = st.radio("Asset Pool:", ["Liquid Core Cash Pools", "Pro Max Strategic Credit Allocation Engine"])
         
-        if st.button("Execute Settlement & Authorize Escrow Release"):
-            if selected_route == "Standard Wallet Balance Core":
-                if st.session_state.wallet_balance >= calculated_grand_total:
-                    st.session_state.wallet_balance -= calculated_grand_total
-                    st.session_state.settled_orders.append({
-                        "order_id": f"SPO-{int(time.time())}",
-                        "amount": calculated_grand_total,
-                        "mode": "Wallet Balance",
-                        "status": "Settled & Released"
+        if st.button("Authorize Core Escrow Release & Finalize Settlement Sequence"):
+            if selected_instrument == "Liquid Core Cash Pools":
+                if st.session_state.wallet_funds >= aggregated_liability:
+                    st.session_state.wallet_funds -= aggregated_liability
+                    st.session_state.transaction_ledger_records.append({
+                        "id": f"TXN-{int(time.time())}",
+                        "amount": aggregated_liability,
+                        "instrument": "Liquid Core Cash Pool",
+                        "timestamp": time.strftime("%Y-%m-%d %H:%M:%S")
                     })
-                    st.session_state.cart_dict = {}
-                    st.success("🎉 Thank you for shopping from ShopClues Framework! Payment authorized and order logged.")
-                else:
-                    st.error("❌ Settlement Failed: Insufficient funds inside the wallet balance framework.")
-                    
-            elif selected_route == "Pro Max Corporate Credit Facility":
-                if not st.session_state.is_pro_max:
-                    st.error("❌ Settlement Denied: Your account profile does not possess Pro Max Credit Access authorization.")
-                else:
-                    current_credit_headroom = st.session_state.credit_limit - st.session_state.credit_used
-                    if current_credit_headroom >= calculated_grand_total:
-                        st.session_state.credit_used += calculated_grand_total
-                        st.session_state.settled_orders.append({
-                            "order_id": f"SPO-{int(time.time())}",
-                            "amount": calculated_grand_total,
-                            "mode": "0% Interest Corporate Credit",
-                            "status": "Settled & Released"
-                        })
-                        st.session_state.cart_dict = {}
-                        st.success("🎉 Thank you for shopping from ShopClues Framework! Premium Credit Settlement authorized successfully.")
-                    else:
-                        st.error("❌ Settlement Failed: Requested allocation exceeds your maximum available credit line headroom.")
-
-
-# --- PAGE 4: MULTI-TIER WALLET & CREDIT CENTRE ---
-elif selected_view == "💳 Multi-Tier Wallet & Credit Engine":
-    st.title("Authorized Financial Liquidity Centre")
-    st.session_state.trigger_celebration = True
-    
-    col_wallet, col_credit = st.columns(2)
-    
-    with col_wallet:
-        st.markdown("## 🪙 Core Wallet Details")
-        st.metric("Available Wallet Cash Reserves", f"₹{st.session_state.wallet_balance:,.2f}")
-        
-        st.markdown("---")
-        st.markdown("### Secure Wallet Capital Injection Portal")
-        auth_pin = st.text_input("Provide Administrator Authorization Key Code:", type="password")
-        if st.button("Verify Key & Inject Liquidity"):
-            if auth_pin == "1234":
-                st.session_state.wallet_balance += 1000000.0  # Rs 10 Lakh manual injection
-                st.success("⚡ Capital Injector Success: ₹10,000,000.00 successfully allocated to active liquid asset state.")
-                st.rerun()
-            else:
-                st.error("❌ Security Warning: Invalid authorization token credential provided.")
-                
-    with col_credit:
-        st.markdown("## 👑 Sopito Pro Max Premium Segment")
-        if not st.session_state.is_pro_max:
-            st.warning("Account Classification Status: Standard Access Profile Tier")
-            st.markdown("""
-                **Procure Shopito Pro Max Subscription Infrastructure**
-                * **Capital Expenditure Requirement:** ₹1,00,00,000.00 (₹1 Crore)
-                * **System Benefits Granted:** Activates permanent authorization for the **₹10 Lakhs Interest-Free Corporate Credit Framework**.
-            """)
-            if st.button("Purchase Pro Max Access (₹1 Crore)"):
-                if st.session_state.wallet_balance >= 10000000.0:
-                    st.session_state.wallet_balance -= 10000000.0
-                    st.session_state.is_pro_max = True
-                    st.session_state.credit_limit = 1000000.0  # ₹10 Lakh Limit Loaded
-                    st.success("👑 Subscription Success: Sopito Pro Max Tier Active. ₹10 Lakhs Interest-Free Credit Facility fully deployed.")
+                    st.session_state.cart_quantities_map = {}
+                    st.success("🎉 Escrow Release Authorization Confirmed! Transaction appended to ledger.")
                     st.rerun()
                 else:
-                    st.error("❌ Transaction Denied: Insufficient wallet cash allocation to execute the premium tier subscription purchase.")
+                    st.error("❌ Settlement Failure: Insufficient baseline liquid allocation reserves.")
+            elif selected_instrument == "Pro Max Strategic Credit Allocation Engine":
+                if not st.session_state.tier_pro_max_active:
+                    st.error("❌ Escrow Refusal: Selected account structure lacks active high-tier strategic credit privileges.")
+                else:
+                    if state_controller.dynamic_available_credit >= aggregated_liability:
+                        st.session_state.credit_allocated_debt += aggregated_liability
+                        st.session_state.transaction_ledger_records.append({
+                            "id": f"TXN-{int(time.time())}",
+                            "amount": aggregated_liability,
+                            "instrument": "0% Interest Credit Allocation",
+                            "timestamp": time.strftime("%Y-%m-%d %H:%M:%S")
+                        })
+                        st.session_state.cart_quantities_map = {}
+                        st.success("🎉 Escrow Release Authorization Confirmed! Corporate debt line tracking updated.")
+                        st.rerun()
+                    else:
+                        st.error("❌ Settlement Failure: Requested overhead exceeds allowable net credit headroom limits.")
+
+# ==========================================
+# ROUTE 4: CAPITAL ALLOCATION & CREDIT DESK
+# ==========================================
+elif navigation_intent == "📊 Capital Allocation & Credit Desk":
+    st.title("Advanced Financial Desk & Vault Architecture")
+    st.session_state.dashboard_animation_trigger = True
+    
+    pane_1, pane_2 = st.columns(2)
+    
+    with pane_1:
+        st.markdown("## 🪙 Liquid Reserves Vault")
+        st.metric("Total Asset Valuation Level", f"₹{st.session_state.wallet_funds:,.2f}")
+        
+        st.markdown("---")
+        st.markdown("### Cryptographic Capital Injector Node")
+        admin_gate_key = st.text_input("Execute Security Level Override Token:", type="password")
+        
+        # CHANGED TO ALLOW DYNAMIC CAPITAL INJECTION ANY AMOUNT YOU WANT
+        if admin_gate_key == "1234":
+            st.success("🔒 Authorization Token Accepted. Advanced Injection Controls Mounted Below:")
+            injection_quantum = st.number_input("Input Custom Capital Inflow Quantum (₹):", min_value=1.0, max_value=500000000.0, value=100000.0, step=50000.0)
+            if st.button("Execute Stream Injection to Active Wallet"):
+                st.session_state.wallet_funds += injection_quantum
+                st.success(f"⚡ Allocation Engine Confirmed: Successfully added ₹{injection_quantum:,.2f} to liquid cash pools.")
+                st.rerun()
+        elif admin_gate_key != "":
+            st.error("❌ Cryptographic Exception: Signature Mismatch. Injection matrix remains locked.")
+            
+    with pane_2:
+        st.markdown("## 👑 Shopito Pro Max Privilege Portal")
+        if not st.session_state.tier_pro_max_active:
+            st.warning("Current Account Status Matrix: Standard Base Rank")
+            st.markdown("""
+                **Procurement Metrics for Pro Max Enterprise Access Architecture:**
+                * **Operational Overhead Asset Purchase:** ₹1,00,00,000.00 (₹1 Crore)
+                * **Unlocks Framework Feature:** Dynamic Activation of the Permanent **₹10 Lakhs Interest-Free Corporate Credit Facility**.
+            """)
+            if st.button("Purchase and Deploy Pro Max Framework Tier"):
+                if st.session_state.wallet_funds >= 10000000.0:
+                    st.session_state.wallet_funds -= 10000000.0
+                    st.session_state.tier_pro_max_active = True
+                    st.session_state.credit_max_limit = 1000000.0  # Deploy ₹10 Lakh Line
+                    st.success("👑 Subscription Loop Completed: Shopito Pro Max features fully provisioned.")
+                    st.rerun()
+                else:
+                    st.error("❌ Infrastructure Exception: Insufficient liquidity holdings available to settle transaction processing.")
         else:
-            st.success("👑 Premium Access Status: Shopito Pro Max Active")
-            st.metric("Total Corporate Credit Allocation", f"₹{st.session_state.credit_limit:,.2f}")
-            st.metric("Utilized Debt Allocation", f"₹{st.session_state.credit_used:,.2f}")
-            st.metric("Net Available Credit Headroom", f"₹{(st.session_state.credit_limit - st.session_state.credit_used):,.2f}")
-            st.caption("Interest Rate Matrix: 0.00% Fixed Perpetual Interest System")
+            st.success("👑 System Clearance Level: Pro Max Active Framework Authorized")
+            st.metric("Gross Credit Cap Allocation", f"₹{st.session_state.credit_max_limit:,.2f}")
+            st.metric("Utilized Debt Drawdown Stack", f"₹{st.session_state.credit_allocated_debt:,.2f}")
+            st.metric("Net Operational Headroom Runway", f"₹{state_controller.dynamic_available_credit:,.2f}")
 
-
-# --- PAGE 5: AUTHORIZED SETTLEMENT LEDGER ---
-elif selected_view == "📝 Authorized Settlement Ledger":
-    st.title("Authorized Settlement Order Log")
-    st.session_state.trigger_celebration = True
-    st.markdown("Formal, real estate standard operational ledger logging finalized transaction receipts.")
+# ==========================================
+# ROUTE 5: AUDIT-TRAIL SETTLEMENT LEDGER
+# ==========================================
+elif navigation_intent == "📑 Audit-Trail Settlement Ledger":
+    st.title("Audit Trail System Registry Logs")
+    st.session_state.dashboard_animation_trigger = True
     
-    if not st.session_state.settled_orders:
-        st.info("No transaction sequences have finalized processing loops in this current session.")
+    if not st.session_state.transaction_ledger_records:
+        st.info("System Tracking Note: Zero immutable operational sequence frames logged in current pipeline loops.")
     else:
-        ledger_dataframe = pd.DataFrame(st.session_state.settled_orders)
-        ledger_dataframe.columns = ["Order Reference ID", "Settled Liability (INR)", "Payment Architecture Mode", "Escrow Status Code"]
-        st.dataframe(ledger_dataframe, use_container_width=True, hide_index=True)
-
-
-# --- PAGE 6: PROFILE ACCESS CONFIGURATION ---
-elif selected_view == "👤 Profile Access Configuration":
-    st.title("Account Holder Role & Access Configuration Hub")
-    st.session_state.trigger_celebration = True
-    
-    st.markdown("### Modify Identity Management Credentials")
-    
-    modified_name = st.text_input("Account Holder Verified Legal Name:", value=st.session_state.user_name)
-    modified_phone = st.text_input("Registered Telephony Network Endpoint:", value=st.session_state.user_phone)
-    modified_pfp = st.text_input("Identity Profile Image Asset Web URL Link:", value=st.session_state.user_pfp)
-    
-    if st.button("Commit Profile Transformations"):
-        st.session_state.user_name = modified_name
-        st.session_state.user_phone = modified_phone
-        st.session_state.user_pfp = modified_pfp
-        st.success("📁 Identity Profile configuration rewritten across the database registry framework!")
-        st.rerun()
-
-# --- Professional Global Signature Footnote ---
-st.sidebar.markdown("""
----
-<div style='text-align: center; font-size: 0.85rem; color: #7C3AED; font-weight: 600;'>
-    Shopito Corporate Suite v3.2<br>जय राधे कृष्ण
-</div>
-""", unsafe_allow_html=True)
+        formal_audit_frame = pd.DataFrame(st.session_st
