@@ -70,7 +70,7 @@ st.markdown("""
             font-weight: 800 !important;
         }
     </style>
-""", unsafe_allowed_html=True)
+""", unsafe_allow_html=True)
 
 # 3. LOCAL DATA CORE: Real-Time Live Amazon Inventories
 if "wallet" not in st.session_state:
@@ -114,7 +114,7 @@ if page == "Dashboard Home":
             <p>This application operates as a standalone server application, avoiding all 403 Google Document structural permission blocks. 
                Use the side navigation panel to seamlessly toggle between application logic segments.</p>
         </div>
-    """, unsafe_allowed_html=True)
+    """, unsafe_allow_html=True)
     
     st.subheader("🔥 Featured Luxury Assets")
     cols = st.columns(2)
@@ -126,7 +126,7 @@ if page == "Dashboard Home":
                     <p style='color:#6B7280; font-size:14px;'>{p['desc']}</p>
                     <h3 style='color:#6D28D9;'>₹{p['price']:,}</h3>
                 </div>
-            """, unsafe_allowed_html=True)
+            """, unsafe_allow_html=True)
             if st.button(f"Quick Add {p['name']}", key=f"home_{p['id']}"):
                 st.session_state.cart.append(p)
                 speak(f"{p['name']} added to cart.")
@@ -151,7 +151,7 @@ elif page == "Amazon Catalogue":
                     </div>
                 </div>
             </div>
-        """, unsafe_allowed_html=True)
+        """, unsafe_allow_html=True)
         if st.button(f"Add to Basket Stack 🛒", key=f"cat_{p['id']}"):
             st.session_state.cart.append(p)
             speak(f"{p['name']} queued.")
@@ -172,7 +172,7 @@ elif page == "Checkout Cart":
                 <p>Accumulated Items Count: <b>{len(st.session_state.cart)}</b></p>
                 <h2>Total Due: ₹{total_cost:,}.00</h2>
             </div>
-        """, unsafe_allowed_html=True)
+        """, unsafe_allow_html=True)
         
         for idx, item in enumerate(st.session_state.cart):
             st.markdown(f"""
@@ -180,7 +180,7 @@ elif page == "Checkout Cart":
                     <span>{item['name']}</span>
                     <b>Streamlit Cost: ₹{item['price']:,}</b>
                 </div>
-            """, unsafe_allowed_html=True)
+            """, unsafe_allow_html=True)
             
         st.write("---")
         
@@ -223,4 +223,4 @@ elif page == "Settled Orders Log":
                         <h2>₹{order['value']:,}.00</h2>
                     </div>
                 </div>
-            """, unsafe_allowed_html=True)
+            """, unsafe_allow_html=True)
