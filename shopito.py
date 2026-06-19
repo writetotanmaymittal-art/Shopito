@@ -384,4 +384,4 @@ elif navigation_intent == "📑 Audit-Trail Settlement Ledger":
     if not st.session_state.transaction_ledger_records:
         st.info("System Tracking Note: Zero immutable operational sequence frames logged in current pipeline loops.")
     else:
-        formal_audit_frame = pd.DataFrame(st.session_st
+        formal_audit_frame = pd.DataFrame(st.session_st)
