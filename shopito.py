@@ -1,5 +1,5 @@
-import streamlit as pd
 import streamlit as st
+import pandas as pd
 import time
 
 # --- Page Configuration ---
@@ -10,79 +10,90 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- Global CSS Styling (Unified Theme, Larger Fonts, Professional Layout) ---
+# --- Complex Theme & Global Style Sheet (Premium Purple Enterprise Theme) ---
 st.markdown("""
     <style>
-        /* Global font adjustments */
+        /* Global Font Hierarchy & Sizing Rules */
         html, body, [class*="css"] {
-            font-size: 17px !important;
+            font-size: 18px !important;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
-        h1 { font-size: 2.5rem !important; font-weight: 700 !important; color: #1E293B; }
-        h2 { font-size: 1.8rem !important; font-weight: 600 !important; color: #334155; }
-        h3 { font-size: 1.4rem !important; font-weight: 600 !important; color: #475569; }
+        h1 { font-size: 2.6rem !important; font-weight: 700 !important; color: #4C1D95; }
+        h2 { font-size: 1.9rem !important; font-weight: 600 !important; color: #5B21B6; }
+        h3 { font-size: 1.5rem !important; font-weight: 600 !important; color: #6D28D9; }
         
-        /* Profile Section styling */
+        /* Profile Management Sidebar Container */
         .profile-container {
             text-align: center;
-            padding: 15px;
-            background-color: #F8FAFC;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            border: 1px solid #E2E8F0;
+            padding: 20px;
+            background: linear-gradient(145deg, #F3E8FF, #FAE8FF);
+            border-radius: 16px;
+            margin-bottom: 25px;
+            border: 1px solid #E9D5FF;
+            box-shadow: 0 4px 6px -1px rgba(109, 40, 217, 0.1);
         }
         .profile-pic {
-            width: 110px;
-            height: 110px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
             object-fit: cover;
-            margin-bottom: 10px;
-            border: 3px solid #3B82F6;
+            margin-bottom: 12px;
+            border: 4px solid #7C3AED;
+            box-shadow: 0 0 10px rgba(124, 58, 237, 0.3);
         }
         .profile-name {
-            font-weight: bold;
-            font-size: 1.2rem;
-            color: #1E293B;
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: #4C1D95;
         }
         
-        /* Advertisement Banner */
+        /* Premium Live Enterprise Advertisement Banner */
         .ad-banner {
-            background: linear-gradient(90deg, #1E3A8A 0%, #3B82F6 100%);
+            background: linear-gradient(135deg, #4C1D95 0%, #7C3AED 50%, #C084FC 100%);
             color: white;
-            padding: 20px;
-            border-radius: 10px;
+            padding: 25px;
+            border-radius: 14px;
             text-align: center;
-            font-weight: bold;
-            font-size: 1.5rem;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            font-weight: 800;
+            font-size: 1.6rem;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 15px -3px rgba(124, 58, 237, 0.3);
+            border: 1px solid #A78BFA;
         }
         
-        /* Product Card */
+        /* High-Fidelity Product Card Framework */
         .product-card {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid #E2E8F0;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
+            background: #FFFFFF;
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid #F3E8FF;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
+        .product-card:hover {
+            box-shadow: 0 10px 15px rgba(109, 40, 217, 0.08);
+            border-color: #DDD6FE;
         }
         
-        /* Price tag formatting vertically upward */
+        /* Professional Price Layout Engine */
         .price-label {
-            font-size: 0.9rem;
-            color: #64748B;
+            font-size: 0.95rem;
+            color: #7C3AED;
             text-transform: uppercase;
-            margin-bottom: -5px;
+            letter-spacing: 0.05em;
+            margin-bottom: 2px;
+            font-weight: 600;
         }
         .price-value {
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: #0F172A;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #1E1B4B;
         }
     </style>
 """, unsafe_allow_html=True)
 
-# --- Session State Initialization ---
+# --- Enterprise Application Core State Manager ---
 if 'wallet_balance' not in st.session_state:
     st.session_state.wallet_balance = 50000.0
 if 'credit_limit' not in st.session_state:
@@ -91,321 +102,308 @@ if 'credit_used' not in st.session_state:
     st.session_state.credit_used = 0.0
 if 'is_pro_max' not in st.session_state:
     st.session_state.is_pro_max = False
-if 'cart' not in st.session_state:
-    st.session_state.cart = {}  # {product_id: quantity}
+if 'cart_dict' not in st.session_state:
+    st.session_state.cart_dict = {}  # Safe mapping architecture for tracking item quantities
 if 'settled_orders' not in st.session_state:
     st.session_state.settled_orders = []
-if 'just_opened_dashboard' not in st.session_state:
-    st.session_state.just_opened_dashboard = True
+if 'trigger_celebration' not in st.session_state:
+    st.session_state.trigger_celebration = True
 
-# Profile Defaults
+# Account Holder Profile Defaults
 if 'user_name' not in st.session_state:
     st.session_state.user_name = "Krishna Kumar"
 if 'user_phone' not in st.session_state:
     st.session_state.user_phone = "+91 98765 43210"
 if 'user_pfp' not in st.session_state:
-    st.session_state.user_pfp = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80"
+    st.session_state.user_pfp = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400"
 
-# --- Mock Marketplace Catalog ---
-CATALOG = {
+# --- Comprehensive Unified Marketplace Catalog ---
+MARKETPLACE_CATALOG = {
     "electronics": [
-        {"id": "macbook_16", "name": "Apple MacBook Pro 16\" (M3 Max, 48GB)", "price": 349900.0, "img": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400"},
-        {"id": "iphone_15", "name": "Apple iPhone 15 Pro Max Titanium", "price": 159900.0, "img": "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400"},
-        {"id": "sony_wh1000", "name": "Sony WH-1000XM5 Wireless Headphones", "price": 29990.0, "img": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400"}
+        {"id": "macbook_16", "name": "Apple MacBook Pro 16\" (M3 Max, 48GB, 1TB SSD)", "price": 349900.0, "img": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400"},
+        {"id": "iphone_15", "name": "Apple iPhone 15 Pro Max Titanium Edition", "price": 159900.0, "img": "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400"},
+        {"id": "sony_wh1000", "name": "Sony WH-1000XM5 Premium Noise Cancelling Headphones", "price": 29990.0, "img": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400"}
     ],
     "watches": [
-        {"id": "tourbillon_chrono", "name": "Mechanical Tourbillon Chronograph", "price": 850000.0, "img": "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=400"}
+        {"id": "tourbillon_chrono", "name": "Luxury Mechanical Tourbillon Chronograph Timepiece", "price": 850000.0, "img": "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=400"}
     ]
 }
 
-def get_product_by_id(pid):
-    for cat in CATALOG.values():
-        for prod in cat:
-            if prod["id"] == pid:
-                return prod
+def resolve_catalog_product(product_id):
+    for category_list in MARKETPLACE_CATALOG.values():
+        for product in category_list:
+            if product["id"] == product_id:
+                return product
     return None
 
-# --- SIDEBAR: Profile & Navigation ---
+# --- SIDEBAR NAV: Account Profile & Navigation Controller ---
 with st.sidebar:
-    # Large, explicit profile space
+    # Dedicated Account Holder Access Profile Display
     st.markdown(f"""
         <div class="profile-container">
             <img src="{st.session_state.user_pfp}" class="profile-pic">
             <div class="profile-name">{st.session_state.user_name}</div>
-            <div style="font-size:0.85rem; color:#64748B;">{st.session_state.user_phone}</div>
+            <div style="font-size:0.9rem; color:#6B28D9; font-weight:500;">{st.session_state.user_phone}</div>
         </div>
     """, unsafe_allow_html=True)
     
-    st.markdown("### Navigation")
-    page = st.radio("Go to:", [
-        "🏠 Dashboard Home", 
-        "📦 Product Marketplace", 
-        "🛒 Checkout Cart", 
-        "💳 Wallet & Credit Centre", 
-        "📝 Settled Orders Log",
-        "👤 Account Settings"
+    st.markdown("### Navigation Matrix")
+    selected_view = st.radio("Navigate to:", [
+        "🏠 Dashboard Management Hub", 
+        "📦 Enterprise Product Catalog", 
+        "🛒 Consolidated Shopping Cart", 
+        "💳 Multi-Tier Wallet & Credit Engine", 
+        "📝 Authorized Settlement Ledger",
+        "👤 Profile Access Configuration"
     ])
     
     st.markdown("---")
-    # Quick Status Indicators
-    st.metric("Wallet Balance", f"₹{st.session_state.wallet_balance:,.2f}")
+    # Live Real-time Asset Metrics
+    st.metric("Liquid Wallet Balance", f"₹{st.session_state.wallet_balance:,.2f}")
     if st.session_state.is_pro_max:
-        st.success("👑 Shopito Pro Max Active")
-        available_credit = st.session_state.credit_limit - st.session_state.credit_used
-        st.metric("Available Credit", f"₹{available_credit:,.2f}")
+        st.success("👑 Shopito Pro Max Authorized")
+        net_credit_available = st.session_state.credit_limit - st.session_state.credit_used
+        st.metric("Available Interest-Free Credit", f"₹{net_credit_available:,.2f}")
 
 
-# --- PAGE 1: DASHBOARD HOME ---
-if page == "🏠 Dashboard Home":
-    # Birthday Popper Celebration Effect (triggers once when entering dashboard)
-    if st.session_state.just_opened_dashboard:
+# --- PAGE 1: DASHBOARD MANAGEMENT HUB ---
+if selected_view == "🏠 Dashboard Management Hub":
+    # High-impact Birthday Popper Explosion System (Triggers automatically upon opening dashboard)
+    if st.session_state.trigger_celebration:
         st.balloons()
-        st.session_state.just_opened_dashboard = False
+        st.session_state.trigger_celebration = False
         
-    st.title("Welcome to Shopito Dashboard")
+    st.title("Welcome to Shopito Corporate Dashboard")
     
-    # Professional Dynamic Ad Banner
+    # Live Marketing Run Banner
     st.markdown("""
         <div class="ad-banner">
-            💥 SHOPITO MEGA SALE IS LIVE! Up to 40% Off on Premium Electronics & Luxury Timepieces! 💥
+            🚀 EXCLUSIVE SHOPITO OPENING SPECIALS: Premium Access Tiers and Luxury Assets Are Now Live! 🚀
         </div>
     """, unsafe_allow_html=True)
     
-    # Overview Layout
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        st.info("### Active Premium Status")
+    # Summary Dashboard Layout Matrix
+    d_col1, d_col2, d_col3 = st.columns(3)
+    with d_col1:
+        st.info("### Core Access Tier Status")
         if st.session_state.is_pro_max:
-            st.markdown("**Plan:** Shopito Pro Max<br>**Access Level:** Fully Authorized Escrow & Interest-free Credit System", unsafe_allow_html=True)
+            st.markdown("**Current Plan:** Shopito Pro Max<br>**System Access:** Full Premium Authorization & Interest-free Credit Activated", unsafe_allow_html=True)
         else:
-            st.markdown("Standard Account. Upgrade to **Shopito Pro Max** to unlock the ₹10 Lakhs Interest-Free Credit System.", unsafe_allow_html=True)
+            st.markdown("**Current Plan:** Standard Account Tier<br>Upgrade to *Shopito Pro Max* to activate the ₹10 Lakhs Interest-Free Credit Framework.", unsafe_allow_html=True)
             
-    with col2:
-        st.info("### Your Cart Quickview")
-        total_items = sum(st.session_state.cart.values())
-        st.markdown(f"**Total unique items:** {len(st.session_state.cart)}<br>**Total quantity:** {total_items} items", unsafe_allow_html=True)
+    with d_col2:
+        st.info("### Cart Summary Data")
+        net_units = sum(st.session_state.cart_dict.values())
+        st.markdown(f"**Unique Stock Keeping Units:** {len(st.session_state.cart_dict)} lines<br>**Gross Units Allocated:** {net_units} pieces", unsafe_allow_html=True)
         
-    with col3:
-        st.info("### Premium Club")
+    with d_col3:
+        st.info("### Premium Options")
         if not st.session_state.is_pro_max:
-            if st.button("Explore Shopito Pro Max"):
-                st.info("Head over to the Wallet & Credit Centre to subscribe!")
+            st.markdown("Subscribe to access immediate interest-free capital liquidity options.")
         else:
-            st.markdown("✅ You have full access to premium tiers.")
+            st.markdown("✅ All high-limit credit and payment settlement architectures are fully accessible.")
 
 
-# --- PAGE 2: PRODUCT MARKETPLACE ---
-elif page == "📦 Product Marketplace":
+# --- PAGE 2: ENTERPRISE PRODUCT CATALOG ---
+elif selected_view == "📦 Enterprise Product Catalog":
     st.title("Shopito Premium Marketplace Catalog")
-    st.session_state.just_opened_dashboard = True # reset popper for next visit
+    st.session_state.trigger_celebration = True  # Queue celebration poppers for next dashboard visit
     
-    # Category Selection
-    category = st.selectbox("Filter by Category:", ["All Categories", "Electronics", "Luxury Mechanical Timepieces"])
+    market_filter = st.selectbox("Select Marketplace Category Matrix:", ["All Categorized Verticals", "Premium Consumer Electronics", "Luxury Mechanical Timepieces"])
     
-    items_to_show = []
-    if category == "All Categories" or category == "Electronics":
-        items_to_show.extend(CATALOG["electronics"])
-    if category == "All Categories" or category == "Luxury Mechanical Timepieces":
-        items_to_show.extend(CATALOG["watches"])
+    render_pool = []
+    if market_filter == "All Categorized Verticals" or market_filter == "Premium Consumer Electronics":
+        render_pool.extend(MARKETPLACE_CATALOG["electronics"])
+    if market_filter == "All Categorized Verticals" or market_filter == "Luxury Mechanical Timepieces":
+        render_pool.extend(MARKETPLACE_CATALOG["watches"])
         
-    # Render Products Grid
-    for item in items_to_show:
-        with st.container():
-            st.markdown(f'<div class="product-card">', unsafe_allow_html=True)
-            c1, c2, c3 = st.columns([1, 2, 1])
+    for item in render_pool:
+        st.markdown(f'<div class="product-card">', unsafe_allow_html=True)
+        col_img, col_desc, col_actions = st.columns([1.2, 2, 1])
+        
+        with col_img:
+            st.image(item["img"], use_container_width=True)
             
-            with c1:
-                st.image(item["img"], use_container_width=True)
+        with col_desc:
+            st.markdown(f"### {item['name']}")
+            st.markdown('<p class="price-label">MSRP Value</p>', unsafe_allow_html=True)
+            st.markdown(f'<p class="price-value">₹{item["price"]:,.2f}</p>', unsafe_allow_html=True)
+            
+        with col_actions:
+            allocated_units = st.session_state.cart_dict.get(item["id"], 0)
+            st.markdown(f"Allocated in Cart: **{allocated_units}**")
+            
+            # Formally Isolated Modification Controllers
+            if allocated_units < 20:
+                if st.button(f"➕ Add Unit", key=f"inc_{item['id']}"):
+                    st.session_state.cart_dict[item["id"]] = allocated_units + 1
+                    st.rerun()
+            else:
+                st.caption("Maximum unit allocation cap reached (20).")
                 
-            with c2:
-                st.markdown(f"### {item['name']}")
-                st.markdown('<p class="price-label">Price</p>', unsafe_allow_html=True)
-                st.markdown(f'<p class="price-value">₹{item["price"]:,.2f}</p>', unsafe_allow_html=True)
-                
-            with c3:
-                # Cart management system
-                current_qty = st.session_state.cart.get(item["id"], 0)
-                st.write(f"In Cart: **{current_qty}**")
-                
-                # Add Option (Finite to 20 items maximum)
-                if current_qty < 20:
-                    if st.button(f"➕ Add to Cart", key=f"add_{item['id']}"):
-                        st.session_state.cart[item["id"]] = current_qty + 1
-                        st.rerun()
-                else:
-                    st.caption("Maximum quantity limit reached (20).")
+            if allocated_units > 0:
+                if st.button(f"➖ Remove Unit", key=f"dec_{item['id']}"):
+                    st.session_state.cart_dict[item["id"]] = allocated_units - 1
+                    if st.session_state.cart_dict[item["id"]] == 0:
+                        del st.session_state.cart_dict[item["id"]]
+                    st.rerun()
                     
-                # Remove Option
-                if current_qty > 0:
-                    if st.button(f"➖ Remove One", key=f"rem_{item['id']}"):
-                        st.session_state.cart[item["id"]] = current_qty - 1
-                        if st.session_state.cart[item["id"]] == 0:
-                            del st.session_state.cart[item["id"]]
-                        st.rerun()
-                        
-            st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
 
-# --- PAGE 3: CHECKOUT CART ---
-elif page == "🛒 Checkout Cart":
-    st.title("Your Checkout Cart")
-    st.session_state.just_opened_dashboard = True
+# --- PAGE 3: CONSOLIDATED SHOPPING CART ---
+elif selected_view == "🛒 Consolidated Shopping Cart":
+    st.title("Your Consolidated Shopping Cart Ledger")
+    st.session_state.trigger_celebration = True
     
-    if not st.session_state.cart:
-        st.warning("Your cart is currently empty. Head over to the Marketplace to add products!")
+    if not st.session_state.cart_dict:
+        st.warning("Your transaction queue is empty. Please add items from the Enterprise Product Catalog.")
     else:
-        grand_total = 0.0
+        calculated_grand_total = 0.0
+        st.markdown("### Itemization Review Matrix")
         
-        # Table list of Cart items
-        st.markdown("### Reviewed Items")
-        
-        for pid, qty in list(st.session_state.cart.items()):
-            prod = get_product_by_id(pid)
-            if prod:
-                item_total = prod["price"] * qty
-                grand_total += item_total
+        for p_id, unit_qty in list(st.session_state.cart_dict.items()):
+            target_product = resolve_catalog_product(p_id)
+            if target_product:
+                line_total = target_product["price"] * unit_qty
+                calculated_grand_total += line_total
                 
-                c1, c2, c3, c4 = st.columns([3, 1, 1, 1])
-                with c1:
-                    st.markdown(f"**{prod['name']}**")
-                with c2:
-                    st.markdown(f"₹{prod['price']:,.2f}")
-                with c3:
-                    # Clean proper quantity column representation, no repeating text lines
-                    st.markdown(f"**Qty: {qty}**")
-                with c4:
-                    if st.button("🗑️ Remove All", key=f"del_all_{pid}"):
-                        del st.session_state.cart[pid]
+                row_c1, row_c2, row_c3, row_c4 = st.columns([3, 1.2, 1, 1])
+                with row_c1:
+                    st.markdown(f"**{target_product['name']}**")
+                with row_c2:
+                    st.markdown(f"₹{target_product['price']:,.2f} each")
+                with row_c3:
+                    st.markdown(f"**Qty: {unit_qty}**")
+                with row_c4:
+                    if st.button("🗑️ Purge Item", key=f"purge_{p_id}"):
+                        del st.session_state.cart_dict[p_id]
                         st.rerun()
                 st.markdown("---")
                 
-        st.markdown(f"### Total Payable Amount: **₹{grand_total:,.2f}**")
+        st.markdown(f"### Total Settlement Liability: **₹{calculated_grand_total:,.2f}**")
         
-        # Payment Gateway Choice Layout
-        st.markdown("### Choose Payment Source")
-        payment_method = st.radio("Select Payment Option:", ["Standard Wallet Balance", "Pro Max Corporate Credit Line"])
+        st.markdown("### Select Payment Gateway Authorization Route")
+        selected_route = st.radio("Authorization Source:", ["Standard Wallet Balance Core", "Pro Max Corporate Credit Facility"])
         
-        if st.button("Confirm Order and Settle Escrow"):
-            if payment_method == "Standard Wallet Balance":
-                if st.session_state.wallet_balance >= grand_total:
-                    st.session_state.wallet_balance -= grand_total
+        if st.button("Execute Settlement & Authorize Escrow Release"):
+            if selected_route == "Standard Wallet Balance Core":
+                if st.session_state.wallet_balance >= calculated_grand_total:
+                    st.session_state.wallet_balance -= calculated_grand_total
                     st.session_state.settled_orders.append({
-                        "id": f"ORD-{int(time.time())}",
-                        "amount": grand_total,
-                        "method": "Wallet",
-                        "status": "Authorized & Released"
+                        "order_id": f"SPO-{int(time.time())}",
+                        "amount": calculated_grand_total,
+                        "mode": "Wallet Balance",
+                        "status": "Settled & Released"
                     })
-                    st.session_state.cart = {}
-                    st.success("🎉 Payment successfully authorized via Wallet! Order has been moved to the Settled Log.")
+                    st.session_state.cart_dict = {}
+                    st.success("🎉 Thank you for shopping from ShopClues Framework! Payment authorized and order logged.")
                 else:
-                    st.error("❌ Insufficient funds inside standard wallet balance framework.")
+                    st.error("❌ Settlement Failed: Insufficient funds inside the wallet balance framework.")
                     
-            elif payment_method == "Pro Max Corporate Credit Line":
+            elif selected_route == "Pro Max Corporate Credit Facility":
                 if not st.session_state.is_pro_max:
-                    st.error("❌ Unauthorized. You need a Shopito Pro Max Subscription to use the credit line.")
+                    st.error("❌ Settlement Denied: Your account profile does not possess Pro Max Credit Access authorization.")
                 else:
-                    available_credit = st.session_state.credit_limit - st.session_state.credit_used
-                    if available_credit >= grand_total:
-                        st.session_state.credit_used += grand_total
+                    current_credit_headroom = st.session_state.credit_limit - st.session_state.credit_used
+                    if current_credit_headroom >= calculated_grand_total:
+                        st.session_state.credit_used += calculated_grand_total
                         st.session_state.settled_orders.append({
-                            "id": f"ORD-{int(time.time())}",
-                            "amount": grand_total,
-                            "method": "Interest-Free Credit",
-                            "status": "Authorized & Released"
+                            "order_id": f"SPO-{int(time.time())}",
+                            "amount": calculated_grand_total,
+                            "mode": "0% Interest Corporate Credit",
+                            "status": "Settled & Released"
                         })
-                        st.session_state.cart = {}
-                        st.success("🎉 Payment successfully authorized via Credit! Order has been moved to the Settled Log.")
+                        st.session_state.cart_dict = {}
+                        st.success("🎉 Thank you for shopping from ShopClues Framework! Premium Credit Settlement authorized successfully.")
                     else:
-                        st.error("❌ Insufficient credit limit available.")
+                        st.error("❌ Settlement Failed: Requested allocation exceeds your maximum available credit line headroom.")
 
 
-# --- PAGE 4: WALLET & CREDIT CENTRE ---
-elif page == "💳 Wallet & Credit Centre":
-    st.title("Authorized Financial Centre")
-    st.session_state.just_opened_dashboard = True
+# --- PAGE 4: MULTI-TIER WALLET & CREDIT CENTRE ---
+elif selected_view == "💳 Multi-Tier Wallet & Credit Engine":
+    st.title("Authorized Financial Liquidity Centre")
+    st.session_state.trigger_celebration = True
     
-    col1, col2 = st.columns(2)
+    col_wallet, col_credit = st.columns(2)
     
-    with col1:
-        st.markdown("### 🪙 Personal Wallet Details")
-        st.metric("Available Wallet Balance", f"₹{st.session_state.wallet_balance:,.2f}")
+    with col_wallet:
+        st.markdown("## 🪙 Core Wallet Details")
+        st.metric("Available Wallet Cash Reserves", f"₹{st.session_state.wallet_balance:,.2f}")
         
-        # Pin code secret bonus feature
         st.markdown("---")
-        st.markdown("#### Secure Wallet Bonus Token")
-        pin_input = st.text_input("Enter authorized authorization PIN code:", type="password")
-        if st.button("Verify & Claim Bonus"):
-            if pin_input == "1234":
-                st.session_state.wallet_balance += 1000000.0  # Rs 10 Lakh
-                st.success("⚡ Access Granted! ₹10,000,000.00 (₹10 Lakhs) loaded into your wallet balance successfully.")
+        st.markdown("### Secure Wallet Capital Injection Portal")
+        auth_pin = st.text_input("Provide Administrator Authorization Key Code:", type="password")
+        if st.button("Verify Key & Inject Liquidity"):
+            if auth_pin == "1234":
+                st.session_state.wallet_balance += 1000000.0  # Rs 10 Lakh manual injection
+                st.success("⚡ Capital Injector Success: ₹10,000,000.00 successfully allocated to active liquid asset state.")
                 st.rerun()
             else:
-                st.error("❌ Invalid PIN code credential.")
+                st.error("❌ Security Warning: Invalid authorization token credential provided.")
                 
-    with col2:
-        st.markdown("### 👑 Shopito Pro Max Corporate Line")
+    with col_credit:
+        st.markdown("## 👑 Sopito Pro Max Premium Segment")
         if not st.session_state.is_pro_max:
-            st.warning("You are currently using a Standard Profile Tier.")
+            st.warning("Account Classification Status: Standard Access Profile Tier")
             st.markdown("""
-                **Upgrade to Shopito Pro Max Subscription**
-                * **Cost:** ₹1,00,00,000.00 (₹1 Crore)
-                * **Benefit:** Grants instant perpetual access to the **₹10 Lakhs Interest-Free Credit System**.
+                **Procure Shopito Pro Max Subscription Infrastructure**
+                * **Capital Expenditure Requirement:** ₹1,00,00,000.00 (₹1 Crore)
+                * **System Benefits Granted:** Activates permanent authorization for the **₹10 Lakhs Interest-Free Corporate Credit Framework**.
             """)
-            if st.button("Purchase Subscription (₹1 Crore)"):
+            if st.button("Purchase Pro Max Access (₹1 Crore)"):
                 if st.session_state.wallet_balance >= 10000000.0:
                     st.session_state.wallet_balance -= 10000000.0
                     st.session_state.is_pro_max = True
-                    st.session_state.credit_limit = 1000000.0 # Rs 10 Lakhs Credit Limit
-                    st.success("👑 Congratulations! You are now a Shopito Pro Max member. ₹10 Lakhs Credit Line unlocked.")
+                    st.session_state.credit_limit = 1000000.0  # ₹10 Lakh Limit Loaded
+                    st.success("👑 Subscription Success: Sopito Pro Max Tier Active. ₹10 Lakhs Interest-Free Credit Facility fully deployed.")
                     st.rerun()
                 else:
-                    st.error("❌ Insufficient Wallet Balance to buy the premium tier subscription.")
+                    st.error("❌ Transaction Denied: Insufficient wallet cash allocation to execute the premium tier subscription purchase.")
         else:
-            st.success("👑 Shopito Pro Max Tier Active")
-            st.metric("Total Credit Limit", f"₹{st.session_state.credit_limit:,.2f}")
-            st.metric("Credit Used", f"₹{st.session_state.credit_used:,.2f}")
-            st.metric("Remaining Available Credit", f"₹{(st.session_state.credit_limit - st.session_state.credit_used):,.2f}")
-            st.caption("Interest Rate: 0.00% Fixed (Perpetual)")
+            st.success("👑 Premium Access Status: Shopito Pro Max Active")
+            st.metric("Total Corporate Credit Allocation", f"₹{st.session_state.credit_limit:,.2f}")
+            st.metric("Utilized Debt Allocation", f"₹{st.session_state.credit_used:,.2f}")
+            st.metric("Net Available Credit Headroom", f"₹{(st.session_state.credit_limit - st.session_state.credit_used):,.2f}")
+            st.caption("Interest Rate Matrix: 0.00% Fixed Perpetual Interest System")
 
 
-# --- PAGE 5: SETTLED ORDERS LOG ---
-elif page == "📝 Settled Orders Log":
-    st.title("Settled Orders Log")
-    st.session_state.just_opened_dashboard = True
-    st.markdown("Below is the formal ledger of all historically processed and authorized corporate escrow orders.")
+# --- PAGE 5: AUTHORIZED SETTLEMENT LEDGER ---
+elif selected_view == "📝 Authorized Settlement Ledger":
+    st.title("Authorized Settlement Order Log")
+    st.session_state.trigger_celebration = True
+    st.markdown("Formal, real estate standard operational ledger logging finalized transaction receipts.")
     
     if not st.session_state.settled_orders:
-        st.info("No orders settled in this cycle yet.")
+        st.info("No transaction sequences have finalized processing loops in this current session.")
     else:
-        # Dynamic formal presentation table
-        import pandas as pd_library
-        df = pd_library.DataFrame(st.session_state.settled_orders)
-        df.columns = ["Order Reference ID", "Authorized Total Amount (INR)", "Payment Settlement Mode", "Escrow Verification Status"]
-        st.dataframe(df, use_container_width=True, hide_index=True)
+        ledger_dataframe = pd.DataFrame(st.session_state.settled_orders)
+        ledger_dataframe.columns = ["Order Reference ID", "Settled Liability (INR)", "Payment Architecture Mode", "Escrow Status Code"]
+        st.dataframe(ledger_dataframe, use_container_width=True, hide_index=True)
 
 
-# --- PAGE 6: ACCOUNT SETTINGS ---
-elif page == "👤 Account Settings":
-    st.title("Account & Profile Access Hub")
-    st.session_state.just_opened_dashboard = True
+# --- PAGE 6: PROFILE ACCESS CONFIGURATION ---
+elif selected_view == "👤 Profile Access Configuration":
+    st.title("Account Holder Role & Access Configuration Hub")
+    st.session_state.trigger_celebration = True
     
-    st.markdown("### Edit Profile Identification Credentials")
+    st.markdown("### Modify Identity Management Credentials")
     
-    new_name = st.text_input("Account Holder Full Name:", value=st.session_state.user_name)
-    new_phone = st.text_input("Registered Contact Number:", value=st.session_state.user_phone)
-    new_pfp = st.text_input("Profile Picture Web URL Link:", value=st.session_state.user_pfp)
+    modified_name = st.text_input("Account Holder Verified Legal Name:", value=st.session_state.user_name)
+    modified_phone = st.text_input("Registered Telephony Network Endpoint:", value=st.session_state.user_phone)
+    modified_pfp = st.text_input("Identity Profile Image Asset Web URL Link:", value=st.session_state.user_pfp)
     
-    if st.button("Save Profile Modifications"):
-        st.session_state.user_name = new_name
-        st.session_state.user_phone = new_phone
-        st.session_state.user_pfp = new_pfp
-        st.success("📁 Account profile architecture updated successfully across the platform!")
+    if st.button("Commit Profile Transformations"):
+        st.session_state.user_name = modified_name
+        st.session_state.user_phone = modified_phone
+        st.session_state.user_pfp = modified_pfp
+        st.success("📁 Identity Profile configuration rewritten across the database registry framework!")
         st.rerun()
 
+# --- Professional Global Signature Footnote ---
 st.sidebar.markdown("""
 ---
-<div style='text-align: center; font-size: 0.8rem; color: #94A3B8;'>
-    Shopito Corporate Suite v2.0<br>जय राधे कृष्ण
+<div style='text-align: center; font-size: 0.85rem; color: #7C3AED; font-weight: 600;'>
+    Shopito Corporate Suite v3.2<br>जय राधे कृष्ण
 </div>
 """, unsafe_allow_html=True)
-    
