@@ -6,8 +6,8 @@ An advanced, multi-threaded, robust computer vision pipeline.
 
 import cv2
 import numpy as np
-matplotlib.use('Agg')
 import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from pathlib import Path
 from typing import List, Tuple, Optional, Dict, Any, Union, Generator
